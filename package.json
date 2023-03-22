@@ -11,24 +11,7 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.7.3",
-    "@truffle/hdwallet-provider": "^2.1.1",
-    "chai": "^4.3.6",
-    "diamond-2": "^1.4.0",
-    "dns.js": "^1.0.1",
-    "dotenv": "^16.0.3",
-    "ethers": "^5.7.1",
-    "events": "^3.3.0",
-    "ipfs-http-client": "^58.0.1",
-    "process": "^0.11.10",
-    "truffle": "^5.6.1",
-    "url": "^0.10.3",
-    "util": "^0.10.4",
-    "vm-browserify": "^0.0.4",
-    "web3": "^1.8.2",
-    "web3modal": "^1.9.9"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "diamond-2": "^1.4.0"
   },
   "private": true
 }

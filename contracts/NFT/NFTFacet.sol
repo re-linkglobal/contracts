@@ -67,9 +67,12 @@ contract NFTFacet {
     }
 
     // Function to query the price of an NFT
-    function getNFTPrice(uint256 tokenId) external view returns (uint256) {
+    function getNFTPrice(
+        uint256 tokenId,
+        address nftAddress
+    ) external view returns (uint256) {
         require(nftPrices[tokenId].exists, "NFT price not set");
-        return nftPrices[tokenId].price;
+        return nftPrices[nftAddress][tokenId].price;
     }
 
     // function setNftPrice(
@@ -99,19 +102,19 @@ contract NFTFacet {
         // LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         // ds.nftPrice[args.nftAddress][args.tokenId] = args.price;
 
-        setNftPrice(args.nftAddress, args.tokenId, args.price);
+        setNFTPrice(args.nftAddress, args.tokenId, args.price);
 
         // emit event
         emit NFTForSale(args.nftAddress, args.tokenId, args.price);
     }
 
-    function getNFTPrice(
-        address nftAddress,
-        uint256 tokenId
-    ) external view returns (uint256) {
-        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        return ds.nftPrice[nftAddress][tokenId];
-    }
+    // function getNFTPrice(
+    //     address nftAddress,
+    //     uint256 tokenId
+    // ) external view returns (uint256) {
+    //     LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+    //     return ds.nftPrice[nftAddress][tokenId];
+    // }
 
     event NFTForSale(address nftAddress, uint256 tokenId, uint256 price);
 }

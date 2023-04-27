@@ -29,6 +29,16 @@ contract NFTFacet {
         uint256 price;
     }
 
+    // Define the price struct
+    struct NFTPrice {
+        uint256 price;
+        bool exists;
+        address nftAddress;
+    }
+
+    // Mapping of NFT IDs to prices
+    mapping(uint256 => NFTPrice) private nftPrices;
+
     function buyNFT(BuyNFTArgs memory args) external payable {
         // get the owner of the NFT
         address owner = INFT(args.nftAddress).ownerOf(args.tokenId);
@@ -44,16 +54,6 @@ contract NFTFacet {
         (bool success, ) = owner.call{value: msg.value}("");
         require(success, "NFTFacet: transfer failed");
     }
-
-    // Define the price struct
-    struct NFTPrice {
-        uint256 price;
-        bool exists;
-        address nftAddress;
-    }
-
-    // Mapping of NFT IDs to prices
-    mapping(uint256 => NFTPrice) private nftPrices;
 
     // Function to set the price of an NFT
     function setNFTPrice(

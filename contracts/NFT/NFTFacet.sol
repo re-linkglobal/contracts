@@ -57,9 +57,9 @@ contract NFTFacet {
 
     // Function to set the price of an NFT
     function setNFTPrice(
+        address nftAddress,
         uint256 tokenId,
-        uint256 price,
-        address nftAddress
+        uint256 price
     ) external {
         require(msg.sender == owner(), "Only the owner can set NFT prices");
         require(tokenId > 0, "Invalid NFT ID");

@@ -56,7 +56,7 @@ contract NFTFacet {
     }
 
     // Function to set the price of an NFT
-    function setNFTPrice(
+    function setNftPrice(
         address nftAddress,
         uint256 tokenId,
         uint256 price
@@ -90,7 +90,7 @@ contract NFTFacet {
             args.tokenId
         );
 
-        setNFTPrice(args.nftAddress, args.tokenId, args.price);
+        setNftPrice(args.nftAddress, args.tokenId, args.price);
 
         // emit event
         emit NFTForSale(args.nftAddress, args.tokenId, args.price);

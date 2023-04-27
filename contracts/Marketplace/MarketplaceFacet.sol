@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.7.1;
 pragma abicoder v2;
 
 import "diamond-2/contracts/interfaces/IERC165.sol";
@@ -7,6 +7,8 @@ import "diamond-2/contracts/interfaces/IDiamondCut.sol";
 import "diamond-2/contracts/interfaces/IDiamondLoupe.sol";
 import "diamond-2/contracts/interfaces/IERC173.sol";
 import "diamond-2/contracts/libraries/LibDiamond.sol";
+
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol" as MyERC721;
 

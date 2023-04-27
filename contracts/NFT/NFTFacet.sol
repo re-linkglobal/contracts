@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.4;
+pragma solidity ^0.7.1;
 pragma abicoder v2;
 
 import "diamond-2/contracts/interfaces/IDiamondCut.sol";

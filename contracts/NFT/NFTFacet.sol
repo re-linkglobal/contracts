@@ -76,15 +76,6 @@ contract NFTFacet {
         return nftPrices[nftAddress][tokenId].price;
     }
 
-    // function setNftPrice(
-    //     address nftAddress,
-    //     uint256 tokenId,
-    //     uint256 price
-    // ) private {
-    //     LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-    //     ds.nftPrice[nftAddress][tokenId] = price;
-    // }
-
     function sellNFT(SellNFTArgs memory args) external {
         // ensure the seller owns the NFT
         require(
@@ -99,15 +90,20 @@ contract NFTFacet {
             args.tokenId
         );
 
-        // store the NFT price
-        // LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
-        // ds.nftPrice[args.nftAddress][args.tokenId] = args.price;
-
         setNFTPrice(args.nftAddress, args.tokenId, args.price);
 
         // emit event
         emit NFTForSale(args.nftAddress, args.tokenId, args.price);
     }
+
+    // function setNftPrice(
+    //     address nftAddress,
+    //     uint256 tokenId,
+    //     uint256 price
+    // ) private {
+    //     LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+    //     ds.nftPrice[nftAddress][tokenId] = price;
+    // }
 
     // function getNFTPrice(
     //     address nftAddress,

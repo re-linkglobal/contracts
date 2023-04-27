@@ -44,30 +44,33 @@ contract NFTFacet {
         (bool success, ) = owner.call{value: msg.value}("");
         require(success, "NFTFacet: transfer failed");
     }
-    
+
     // Define the price struct
-struct NFTPrice {
-    uint256 price;
-    bool exists;
-    address nftAddress;
-}
+    struct NFTPrice {
+        uint256 price;
+        bool exists;
+        address nftAddress;
+    }
 
-// Mapping of NFT IDs to prices
-mapping (uint256 => NFTPrice) private nftPrices;
+    // Mapping of NFT IDs to prices
+    mapping(uint256 => NFTPrice) private nftPrices;
 
-// Function to set the price of an NFT
-function setNFTPrice(uint256 tokenId, uint256 price, address nftAddress,) external {
-    require(msg.sender == owner(), "Only the owner can set NFT prices");
-    require(tokenId > 0, "Invalid NFT ID");
-    nftPrices[nftAddress][tokenId] = NFTPrice(price, true, nftAddress);
-}
+    // Function to set the price of an NFT
+    function setNFTPrice(
+        uint256 tokenId,
+        uint256 price,
+        address nftAddress
+    ) external {
+        require(msg.sender == owner(), "Only the owner can set NFT prices");
+        require(tokenId > 0, "Invalid NFT ID");
+        nftPrices[nftAddress][tokenId] = NFTPrice(price, true, nftAddress);
+    }
 
-// Function to query the price of an NFT
-function getNFTPrice(uint256 tokenId) external view returns (uint256) {
-    require(nftPrices[tokenId].exists, "NFT price not set");
-    return nftPrices[tokenId].price;
-}
-
+    // Function to query the price of an NFT
+    function getNFTPrice(uint256 tokenId) external view returns (uint256) {
+        require(nftPrices[tokenId].exists, "NFT price not set");
+        return nftPrices[tokenId].price;
+    }
 
     // function setNftPrice(
     //     address nftAddress,

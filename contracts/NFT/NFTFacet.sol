@@ -61,7 +61,8 @@ contract NFTFacet {
         uint256 tokenId,
         uint256 price
     ) external {
-        require(msg.sender == owner(), "Only the owner can set NFT prices");
+        address owner = INFT(nftAddress).ownerOf(tokenId);
+        require(msg.sender == owner, "Only the owner can set NFT prices");
         require(tokenId > 0, "Invalid NFT ID");
         nftPrices[nftAddress][tokenId] = NFTPrice(price, true, nftAddress);
     }

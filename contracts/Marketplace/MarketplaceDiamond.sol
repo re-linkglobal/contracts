@@ -21,7 +21,11 @@ contract MarketplaceDiamond {
         DiamondArgs memory _args
     ) payable {
         LibDiamond.diamondCut(_diamondCut, address(0), new bytes(0));
-        LibDiamond.setContractOwner(_args.owner);
+
+        // update the contract owner only if it has not been set previously
+        if (LibDiamond.contractOwner() == address(0)) {
+            LibDiamond.setContractOwner(_args.owner);
+        }
 
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
 

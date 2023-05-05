@@ -6,8 +6,9 @@ import "diamond-2/contracts/libraries/LibDiamond.sol";
 import "diamond-2/contracts/interfaces/IDiamondLoupe.sol";
 import "diamond-2/contracts/interfaces/IDiamondCut.sol";
 import "diamond-2/contracts/interfaces/IERC173.sol";
-// import "diamond-2/contracts/interfaces/IERC165.sol";
-import "./NFTCollectionFacet.sol"; // import your new facet contract
+
+// import the new facet contract
+import "./NFTCollectionFacet.sol";
 
 contract NFTCollectonDiamond {
     // more arguments are added to this struct
@@ -20,8 +21,12 @@ contract NFTCollectonDiamond {
         IDiamondCut.FacetCut[] memory _diamondCut,
         DiamondArgs memory _args
     ) payable {
+        // update the contract owner only if it has not been set previously
+        if (LibDiamond.contractOwner() == address(0)) {
+            LibDiamond.setContractOwner(_args.owner);
+        }
+
         LibDiamond.diamondCut(_diamondCut, address(0), new bytes(0));
-        LibDiamond.setContractOwner(_args.owner);
 
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
 
@@ -31,18 +36,19 @@ contract NFTCollectonDiamond {
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
 
-        // define a new facet cut structure for the TestFacet contract
-        IDiamondCut.FacetCut memory testFacetCut = IDiamondCut.FacetCut({
-            facetAddress: address(new NFTCollectionFacet()),
-            action: IDiamondCut.FacetCutAction.Add,
-            functionSelectors: new bytes4[](0) // leave empty if no functions to add
-        });
+        // define a new facet cut structure for the NFTCollectionFacet contract
+        IDiamondCut.FacetCut memory nftCollectionFacetCut = IDiamondCut
+            .FacetCut({
+                facetAddress: address(new NFTCollectionFacet()),
+                action: IDiamondCut.FacetCutAction.Add,
+                functionSelectors: new bytes4[](0) // leave empty if no functions to add
+            });
 
-        // create an array of facet cuts containing the new TestFacet cut
+        // create an array of facet cuts containing the new NFTCollectionFacet cut
         IDiamondCut.FacetCut[] memory facetCuts = new IDiamondCut.FacetCut[](1);
-        facetCuts[0] = testFacetCut;
+        facetCuts[0] = nftCollectionFacetCut;
 
-        // add the new TestFacet as a new facet to the Diamond contract
+        // add the new NFTCollectionFacet as a new facet to the Diamond contract
         LibDiamond.diamondCut(facetCuts, address(0), new bytes(0));
     }
 

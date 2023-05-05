@@ -10,7 +10,7 @@ import "diamond-2/contracts/libraries/LibDiamond.sol";
 
 // import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol" as MyERC721;
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol" as MyERC721;
 
 contract MarketplaceFacet {
     // Marketplace storage
@@ -75,7 +75,7 @@ contract MarketplaceFacet {
         ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
-        LibDiamond.enforceIsContractOwner();
+        // LibDiamond.enforceIsContractOwner();
         nftMarketplaceStorage().owner = _owner;
         nftMarketplaceStorage().initialized = true;
     }
@@ -105,29 +105,29 @@ contract MarketplaceFacet {
     }
 
     // Add an NFT to the marketplace
-    // function addNFTToMarketplace(
-    //     address _collectionAddress,
-    //     uint256 _tokenId
-    // ) external {
-    //     require(
-    //         nftMarketplaceStorage().collectionsForSale[_collectionAddress],
-    //         "COLLECTION_NOT_FOR_SALE"
-    //     );
-    //     require(
-    //         IERC165(_collectionAddress).supportsInterface(
-    //             IERC721(_collectionAddress).interfaceId()
-    //         ),
-    //         "NOT_NFT_COLLECTION"
-    //     );
-    //     IERC721(_collectionAddress).safeTransferFrom(
-    //         msg.sender,
-    //         address(this),
-    //         _tokenId
-    //     );
-    //     nftMarketplaceStorage().nftListing[_tokenId] = _collectionAddress;
-    //     nftMarketplaceStorage().nftListings.push(_tokenId);
-    //     emit NFTAddedToMarketplace(_collectionAddress, _tokenId);
-    // }
+    function addNFTToMarketplace(
+        address _collectionAddress,
+        uint256 _tokenId
+    ) external {
+        require(
+            nftMarketplaceStorage().collectionsForSale[_collectionAddress],
+            "COLLECTION_NOT_FOR_SALE"
+        );
+        require(
+            IERC165(_collectionAddress).supportsInterface(
+                IERC721(_collectionAddress).interfaceId()
+            ),
+            "NOT_NFT_COLLECTION"
+        );
+        IERC721(_collectionAddress).safeTransferFrom(
+            msg.sender,
+            address(this),
+            _tokenId
+        );
+        nftMarketplaceStorage().nftListing[_tokenId] = _collectionAddress;
+        nftMarketplaceStorage().nftListings.push(_tokenId);
+        emit NFTAddedToMarketplace(_collectionAddress, _tokenId);
+    }
 
     // // Remove an NFT from the marketplace
     // function removeNFTFromMarketplace(uint256 _tokenId) external {

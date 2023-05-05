@@ -8,9 +8,9 @@ import "diamond-2/contracts/interfaces/IDiamondLoupe.sol";
 import "diamond-2/contracts/interfaces/IERC173.sol";
 import "diamond-2/contracts/libraries/LibDiamond.sol";
 
-// import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol" as MyERC721;
+// import "@openzeppelin/contracts/token/ERC721/IERC721.sol" as MyERC721;
 
 contract MarketplaceFacet {
     // Marketplace storage

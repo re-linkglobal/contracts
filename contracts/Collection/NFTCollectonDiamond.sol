@@ -22,6 +22,7 @@ contract NFTCollectonDiamond {
         DiamondArgs memory _args
     ) payable {
         LibDiamond.diamondCut(_diamondCut, address(0), new bytes(0));
+        LibDiamond.setContractOwner(msg.sender);
 
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
 
@@ -32,10 +33,13 @@ contract NFTCollectonDiamond {
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
     }
 
-    function addFacetCut(bytes4[] calldata functionSelectors) public {
+    function addFacetCut(
+        address facetAddress,
+        bytes4[] calldata functionSelectors
+    ) public {
         // define a new facet cut structure for the NFTCollectionFacet contract
         IDiamondCut.FacetCut memory facetCut = IDiamondCut.FacetCut({
-            facetAddress: address(new NFTCollectionFacet(payable(msg.sender))),
+            facetAddress: facetAddress,
             action: IDiamondCut.FacetCutAction.Add,
             functionSelectors: functionSelectors
         });
@@ -52,6 +56,10 @@ contract NFTCollectonDiamond {
     function transferOwnership(address newOwner) public {
         LibDiamond.enforceIsContractOwner();
         LibDiamond.setContractOwner(newOwner);
+    }
+
+    function getContractOwner() public view returns (address) {
+        return LibDiamond.diamondStorage().contractOwner;
     }
 
     // Find facet for function that is called and execute the

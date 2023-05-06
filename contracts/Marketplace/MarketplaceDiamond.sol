@@ -30,10 +30,14 @@ contract MarketplaceDiamond {
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
     }
 
-    function addFacetCut(bytes4[] calldata functionSelectors) public {
+    function addFacetCut(
+        address facetAddress,
+        bytes4[] calldata functionSelectors
+    ) public {
+        LibDiamond.enforceIsContractOwner();
         // define a new facet cut structure for the MarketplaceFacet contract
         IDiamondCut.FacetCut memory facetCut = IDiamondCut.FacetCut({
-            facetAddress: address(new MarketplaceFacet(payable(msg.sender))),
+            facetAddress: facetAddress,
             action: IDiamondCut.FacetCutAction.Add,
             functionSelectors: functionSelectors
         });

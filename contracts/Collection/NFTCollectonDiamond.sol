@@ -33,18 +33,18 @@ contract NFTCollectonDiamond {
     }
 
     function addFacetCut(bytes4[] calldata functionSelectors) public {
-        // define a new facet cut structure for the MarketplaceFacet contract
+        // define a new facet cut structure for the NFTCollectionFacet contract
         IDiamondCut.FacetCut memory facetCut = IDiamondCut.FacetCut({
-            facetAddress: address(new MarketplaceFacet(payable(msg.sender))),
+            facetAddress: address(new NFTCollectionFacet(payable(msg.sender))),
             action: IDiamondCut.FacetCutAction.Add,
             functionSelectors: functionSelectors
         });
 
-        // create an array of facet cuts containing the new MarketplaceFacet cut
+        // create an array of facet cuts containing the new NFTCollectionFacet cut
         IDiamondCut.FacetCut[] memory facetCuts = new IDiamondCut.FacetCut[](1);
         facetCuts[0] = facetCut;
 
-        // add the new MarketplaceFacet as a new facet to the Diamond contract
+        // add the new NFTCollectionFacet as a new facet to the Diamond contract
         LibDiamond.diamondCut(facetCuts, address(0), new bytes(0));
     }
 

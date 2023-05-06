@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.1;
-pragma experimental ABIEncoderV2;
+pragma abicoder v2;
 
 import "diamond-2/contracts/libraries/LibDiamond.sol";
 import "diamond-2/contracts/interfaces/IDiamondLoupe.sol";
@@ -21,11 +21,6 @@ contract NFTCollectonDiamond {
         IDiamondCut.FacetCut[] memory _diamondCut,
         DiamondArgs memory _args
     ) payable {
-        // update the contract owner only if it has not been set previously
-        if (LibDiamond.contractOwner() == address(0)) {
-            LibDiamond.setContractOwner(_args.owner);
-        }
-
         LibDiamond.diamondCut(_diamondCut, address(0), new bytes(0));
 
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
@@ -35,21 +30,28 @@ contract NFTCollectonDiamond {
         ds.supportedInterfaces[type(IDiamondCut).interfaceId] = true;
         ds.supportedInterfaces[type(IDiamondLoupe).interfaceId] = true;
         ds.supportedInterfaces[type(IERC173).interfaceId] = true;
+    }
 
-        // define a new facet cut structure for the NFTCollectionFacet contract
-        IDiamondCut.FacetCut memory nftCollectionFacetCut = IDiamondCut
-            .FacetCut({
-                facetAddress: address(new NFTCollectionFacet()),
-                action: IDiamondCut.FacetCutAction.Add,
-                functionSelectors: new bytes4[](0) // leave empty if no functions to add
-            });
+    function addFacetCut(bytes4[] calldata functionSelectors) public {
+        // define a new facet cut structure for the MarketplaceFacet contract
+        IDiamondCut.FacetCut memory facetCut = IDiamondCut.FacetCut({
+            facetAddress: address(new MarketplaceFacet(payable(msg.sender))),
+            action: IDiamondCut.FacetCutAction.Add,
+            functionSelectors: functionSelectors
+        });
 
-        // create an array of facet cuts containing the new NFTCollectionFacet cut
+        // create an array of facet cuts containing the new MarketplaceFacet cut
         IDiamondCut.FacetCut[] memory facetCuts = new IDiamondCut.FacetCut[](1);
-        facetCuts[0] = nftCollectionFacetCut;
+        facetCuts[0] = facetCut;
 
-        // add the new NFTCollectionFacet as a new facet to the Diamond contract
+        // add the new MarketplaceFacet as a new facet to the Diamond contract
         LibDiamond.diamondCut(facetCuts, address(0), new bytes(0));
+    }
+
+    // transfer ownership to a new address
+    function transferOwnership(address newOwner) public {
+        LibDiamond.enforceIsContractOwner();
+        LibDiamond.setContractOwner(newOwner);
     }
 
     // Find facet for function that is called and execute the
